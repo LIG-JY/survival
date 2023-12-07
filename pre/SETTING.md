@@ -112,19 +112,19 @@ gradle init
 
 (1) project type 선택
 
-![Alt text](../image/setting/gradle_setting_00.png)
+![Step 1](../image/setting/gradle_setting_00.png)
 
 (2) 언어 선택
 
-![Alt text](../image/setting/gradle_setting_01.png)
+![Step 2](../image/setting/gradle_setting_01.png)
 
 (3) build script DSL 선택
 
-![Alt text](../image/setting/gradle_setting_02.png)
+![Step 3](../image/setting/gradle_setting_02.png)
 
 (4) 나머지 과정 생략...
 
-![Alt text](../image/setting/gradle_setting_03.png)
+![Step 4](../image/setting/gradle_setting_03.png)
 
 선택해서 완료하면 폴더 내에 다음과 같이 폴더 구조가 생긴 것을 확인할 수 있습니다.
 
