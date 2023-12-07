@@ -2,7 +2,7 @@
 
 - [megaptera-back](README.md)
 
-- [개발 환경 설정](pre/setting.md)
+- [개발 환경 설정](./pre/Setting.md)
 
 - [1주차](week1/README.md)
 
