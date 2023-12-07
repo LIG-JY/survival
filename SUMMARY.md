@@ -1,8 +1,23 @@
-# Table of Contents
+# Table of contents
 
-## 개발 환경 설정
+- [megaptera-back](README.md)
 
-- [페이지 제목](페이지 경로)
-  - [하위 페이지 제목](하위페이지 경로)
+- [개발 환경 설정](pre/undefined.md)
 
-## 서브 그룹 제목
+- [1주차](week1/README.md)
+
+  - [1. Environment](week1/environment.md)
+  - [2. TypeScript](week1/typescript.md)
+  - [3. React](week1/react.md)
+  - [4. Testing Library](week1/testing-library.md)
+  - [5. Parcel & ESLint](week1/parcel-eslint.md)
+
+- [2주차](week2/README.md)
+
+  - [1. JSX](week2/jsx.md)
+
+- [3주차](week3/README.md)
+
+  - [1. React Component](week3/react-component.md)
+  - [2. React State](week3/react-state.md)
+  - [3. Thinking in React](week3/thinking-in-react.md)
