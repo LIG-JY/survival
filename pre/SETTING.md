@@ -12,7 +12,7 @@ description: 자바 개발 환경을 설정합니다.
 
 ### 2. 터미널 창에서 복사된 주소를 붙여넣고 엔터를 입력해 설치
 
-![Alt text](../image/setting/image.png)
+![SDKMAN!](../image/setting/image.png)
 
 ### 3. 터미널 창에서 아래와 같은 명령어를 입력해 ~/.zprofile 파일에 범용 설정을 추가
 
@@ -78,7 +78,7 @@ sdk current
 ### 단축 명령어 설정
 
 - 상단 메뉴 중 tools → create command line 를 클릭하거나 shift 키를 두번 눌러 create command line-luncher 를 검색하여 클릭해줍니다. ok 를 눌러 intellij 열기 명령어를 생성해줍니다.  
-  ![Alt text](../image/setting/intellij_setting_01.png)
+  ![create comman line](../image/setting/intellij_setting_01.png)
 
 ```<bash>
 export PATH=$PATH:/Applications/IntelliJ\ IDEA.app/Contents/MacOS
@@ -111,12 +111,19 @@ gradle init
 명령어를 실행하면 무엇을 만들 것인지, 어떤 언어로 만들 것인지, 빌드 스크립트는 무엇으로 만들 것인지, 테스트 프레임워크는 무엇으로 만들 것인지 물어봅니다.
 
 1. project type 선택
+
    ![Alt text](../image/setting/gradle_setting_00.png)
+
 2. 언어 선택
+
    ![Alt text](../image/setting/gradle_setting_01.png)
+
 3. build script DSL 선택
+
    ![Alt text](../image/setting/gradle_setting_02.png)
+
 4. 나머지 과정 생략...
+
    ![Alt text](../image/setting/gradle_setting_03.png)
 
 선택해서 완료하면 폴더 내에 다음과 같이 폴더 구조가 생긴 것을 확인할 수 있습니다.
