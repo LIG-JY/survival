@@ -50,6 +50,7 @@ sdk install java 18.0.1-tem
 
 # 설치된 jdk 목록 확인
 sdk list java | grep local
+sdk list java | grep installed
 
 # 현재 사용중인 jdk 확인
 sdk current
