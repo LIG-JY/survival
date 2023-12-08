@@ -85,6 +85,22 @@ sdk current
 export PATH=$PATH:/Applications/IntelliJ\ IDEA.app/Contents/MacOS
 ```
 
+#### 환경변수 영구 설정하기
+
+- 무슨 쉘을 사용하고 있는지 확인
+
+```<bash>
+echo $SHELL
+/bin/zsh
+```
+
+- zsh 설정파일을 수정
+
+```<bash>
+echo 'export PATH=$PATH:/Applications/IntelliJ\ IDEA.app/Contents/MacOS' >> ~/.zshrc
+source ~/.zshrc
+```
+
 - 생성한 명령어는 iterm에서 해당 폴더를 intelliJ를 이용해 프로젝트를 여는데 사용됩니다. 프로젝트를 열 때 터미널에서 idea <경로> 명령어를 이용해 열어주세요.
 
 ```<bash>
