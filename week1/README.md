@@ -13,6 +13,8 @@
 
 ## keyword
 
+### HTTP의 이해
+
 - HTTP(Hypertext Transfer Protocol)
 - HTTP와 HTTPS의 차이(TLS)
 - 클라이언트-서버 모델
@@ -25,3 +27,19 @@
     - 멱등성
   - HTTP 응답 상태 코드(HTTP response status code)
     - 리다이렉션
+
+### HTTP Client
+
+- TCP/IP 통신
+- TCP와 UDP
+- Socket과 Socket API 구분
+- URI와 URL
+- 호스트(host)
+  - IP 주소
+  - Domain name
+  - DNS
+- 포트(port)
+- path(경로)
+- Java text blocks
+- Java InputStream과 OutputStream
+- Java try-with-resources
