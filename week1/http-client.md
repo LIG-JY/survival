@@ -207,7 +207,29 @@ System.out.println(charBuffer.toString());
 
 ##### 참고) CharBuffer와 Flip
 
-[CharBuffer & Flip](https://jamssoft.tistory.com/221/)
+[CharBuffer & Flip](https://jamssoft.tistory.com/221/)  
+[예제](https://stackoverflow.com/questions/14792968/what-is-the-purpose-of-bytebuffers-flip-method-and-why-is-it-called-flip/50480459#50480459)
+
+```<java>
+public void flipExample() {
+        CharBuffer cbuff = CharBuffer.allocate(40);
+        cbuff.put("hello");
+        // These two lines below are what flip does
+        cbuff.limit(cbuff.position());
+        cbuff.position(0);
+
+        while (cbuff.hasRemaining()) {
+            System.out.println(cbuff.get());
+        }
+    }
+
+// output
+h
+e
+l
+l
+o
+```
 
 출력결과를 개발자 모드에서 확인해보자. 본문과 동일함을 확인할 수 있다.
 
