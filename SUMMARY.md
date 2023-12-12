@@ -7,7 +7,7 @@
 - [1주차](week1/README.md)
 
   - [1. Http에 관한 이해](week1/understanding-of-http.md)
-  - [2. TypeScript](week1/typescript.md)
+  - [2. Http Client](week1/http-client.md)
   - [3. React](week1/react.md)
   - [4. Testing Library](week1/testing-library.md)
   - [5. Parcel & ESLint](week1/parcel-eslint.md)
