@@ -6,7 +6,7 @@
 ## 목차
 
 1. [HTTP의 이해](./understanding-of-http.md)
-2. [HTTP Client]()
+2. [HTTP Client](./http-client.md)
 3. [HTTP Server]()
 4. [Java HTTP Server]()
 5. [Spring Web MVC]()
