@@ -7,7 +7,7 @@
 
 1. [HTTP의 이해](./understanding-of-http.md)
 2. [HTTP Client](./http-client.md)
-3. [HTTP Server]()
+3. [HTTP Server](./http-server.md)
 4. [Java HTTP Server]()
 5. [Spring Web MVC]()
 
@@ -43,3 +43,8 @@
 - Java text blocks
 - Java InputStream과 OutputStream
 - Java try-with-resources
+
+### HTTP Server
+
+- Java ServerSocket
+- Blocking vs Non-Blocking
