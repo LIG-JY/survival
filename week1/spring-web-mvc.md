@@ -42,6 +42,8 @@ Spring WebFlux 등에서는 Controller 대신 Handler란 개념을 사용한다.
 
 ![Spring initializer](../image/week1/spring-web-mvc/image.png)
 
+간단하게 RestController만 구현하면 된다.
+
 ```<java>
 package com.gyo.spring.mvc.server.contollers;
 
@@ -55,6 +57,15 @@ public class WelcomeController {
         return "Hello world!";
     }
 }
+```
+
+이제 curl 로 요청을 보내면 응답을 받을 수 있다.
+
+```<bash>
+>> 입력
+curl localhost:8080/sub
+>> 출력
+Hello world!
 ```
 
 #### 어노테이션 레퍼런스
