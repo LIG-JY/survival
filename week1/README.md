@@ -9,7 +9,7 @@
 2. [HTTP Client](./http-client.md)
 3. [HTTP Server](./http-server.md)
 4. [Java HTTP Server](./java-httpserver.md)
-5. [Spring Web MVC]()
+5. [Spring Web MVC](./spring-web-mvc.md)
 
 ## keyword
 
@@ -55,3 +55,21 @@
 - Java NIO
 - Java Lambda expression(람다식)
   - Java Functional interface(함수형 인터페이스)
+
+### Spring Web MVC
+
+- [Spring](https://docs.spring.io/spring-framework/docs/current/reference/html/overview.html#overview)
+- Spring Boot
+- Spring initializer
+- Web Server와 Web Application Server(WAS)
+  - Tomcat
+- Model-View-Controller(MVC) 아키텍처 패턴
+- 관심사의 분리(Seperation of Concern)
+- Spring MVC
+- Java Annotation
+- Spring Annotation
+  - @RestController
+    - @Controller
+    - @ResponseBody
+  - @GetMapping
+    - @RequestMapping
