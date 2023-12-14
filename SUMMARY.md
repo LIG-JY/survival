@@ -9,4 +9,4 @@
   - [1. Http에 관한 이해](week1/understanding-of-http.md)
   - [2. Http Client](week1/http-client.md)
   - [3. Http Server](week1/http-server.md)
-  - [4. Java HttpServer](week/java-httpserver.md)
+  - [4. Java HttpServer](week1/java-httpserver.md)
