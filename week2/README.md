@@ -45,3 +45,7 @@
 
 아래 문서를 보고 정리  
 https://learn.microsoft.com/ko-kr/azure/architecture/best-practices/api-design#organize-the-api-design-around-resources
+
+### Apply Collection Pattern
+
+#### CQS
