@@ -7,8 +7,8 @@
 
 1. [1. REST API](./rest-api.md)
 2. [2. URI & MIME type](./uri_mime_type.md)
-3. [3. Collection Pattern](./collection_patter.md)
-4. [4. Collection Pattern 적용](./apply_collection_patter.md)
+3. [3. Collection Pattern](./collection_pattern.md)
+4. [4. Collection Pattern 적용](./apply_collection_pattern.md)
 5. [5. Spring Web MVC](./spring-web-mvc.md)
 
 ## keyword
