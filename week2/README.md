@@ -49,3 +49,22 @@ https://learn.microsoft.com/ko-kr/azure/architecture/best-practices/api-design#o
 ### Apply Collection Pattern
 
 #### CQS
+
+### Spring Web MVC로 구현
+
+#### 어노테이션
+
+- @RequestMapping
+  - @GetMapping
+  - @PostMapping
+  - @PatchMapping
+  - @DeleteMapping
+  - @PathVariable
+- @RequestBody
+- @ExceptionHandler
+- @ResponseStatus
+
+## 참고서적
+
+- [RESTful Web API](http://aladin.kr/p/zGUKk)
+- [웹 API 디자인](http://aladin.kr/p/byC7Y)
