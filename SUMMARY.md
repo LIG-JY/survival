@@ -19,3 +19,11 @@
   - [3. Collection Pattern](week2/collection_patter.md)
   - [4. Collection Pattern 적용](week2/apply_collection_patter.md)
   - [5. Spring Web MVC](week2/spring-web-mvc.md)
+
+- [3주차](week3/README.md)
+
+  - [1. REST API]()
+  - [2. URI & MIME type]()
+  - [3. Collection Pattern]()
+  - [4. Collection Pattern 적용]()
+  - [부록 1. RMI]()
