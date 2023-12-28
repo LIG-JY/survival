@@ -4,13 +4,13 @@
 
 ### DTO의 이해
 
-[DTO의 정의](https://martinfowler.com/eaaCatalog/dataTransferObject.html)에 대해서 알아보자. martinFowler의 Pattern of Enterprise Aplication Architecture에 정의가 언급된다. 여기서 주의할 것은 아키텍처 패턴이라는 것이다. 아키텍처에서 반복적으로 사용되는 솔루션을 말한다.
+[DTO의 정의](https://martinfowler.com/eaaCatalog/dataTransferObject.html)에 대해서 알아보자. Martin Fowler의 Pattern of Enterprise Aplication Architecture에 정의가 언급된다. 여기서 주의할 것은 DTO는 아키텍처 패턴이라는 것이다. 즉 아키텍처에서 반복적으로 사용되는 솔루션을 말한다.
 
 #### 참고: 아키텍처 패턴
 
 아키텍처 패턴은 일반적인 아키텍처 디자인 문제에 대한 재사용 가능한 솔루션이다. 특정한 맥락에서 자주 발생하는 문제에 대한 일반적인 해결책을 제공하며, 이를 사용함으로써 시스템의 설계 및 개발을 더 쉽게 만들 수 있다. 대표적으로 MVC Pattern이 있다.
 
-구체적인 정의는 아래와 같다.
+DTO의 구체적인 정의는 아래와 같다.
 
 > An object that carries data between processes in order to reduce the number of method calls.
 
@@ -18,7 +18,7 @@
 
 > When you're working with a remote interface, such as Remote Facade (388), each call to it is expensive
 
-remote interface에서 통신하는 것은 비싸다..? 이렇게 2개의 내용을 종합해서 정리하면 [Remote Facade](https://martinfowler.com/eaaCatalog/remoteFacade.html)와 같은 원격 통신 인터페이스는 제약 조건이 존재한다는 것이다. 이렇게 원격 통신 인터페이스의 제약 조건을 왜 언급하나면 웹 어플레케이션의 아키텍처가 이를 기반으로 하기 때문이다.
+remote interface에서 통신하는 것은 비싸다..? 이렇게 2개의 내용을 종합해서 정리하면 [Remote Facade](https://martinfowler.com/eaaCatalog/remoteFacade.html)와 같은 원격 통신 인터페이스에는 제약 조건이 존재한다는 것이다. 이렇게 원격 통신 인터페이스의 제약 조건을 왜 언급하나면 웹 어플레케이션의 아키텍처가 이를 기반으로 하기 때문이다. 결국 DTO는 이런 제약 조건을 고려해서 만들어졌다.
 
 #### 제약조건
 
@@ -36,12 +36,12 @@ remote interface에서 통신하는 것은 비싸다..? 이렇게 2개의 내용
 
 - File : 가장 기본적인 접근. 한 파일이 있으면 두 프로세스에서 읽을 수 있다. 이를 읽으면서 소통할 수 있겠죠? 물론 파일 시스템에서는 두 프로세스에서 동시에 쓰려고 하면 문제가 되긴한다. 그래서 한 프로세스에서 쓰고 다른 프로세스에서는 읽기만하는 식으로 소통할 수 있다. 이 방법은 원격 환경(인터넷)에서 활용하기 어렵다.
 
-- Socket : 파일과 유사하게 읽고 쓸 수 있지만, 원격 환경에서도 활용할 수 있다. HTTP 같은 고수준 프로토콜을 활용하면 어느 정도 정해진 틀이 있기 때문에 상대적으로 파일에 비해서 쉽게 활용할 수 있다.(Java의 Socket API, httpServer 등) 여기서 한 번 더 제약(약속)을 걸어서 Socket 통신 기반으로 RESTful 한 통신을 할 수 있다.(Resource에 대한 CRUD, Collection Pattern)  
+- Socket : 파일과 유사하게 읽고 쓸 수 있지만, 원격 환경에서도 활용할 수 있다. HTTP 같은 고수준 프로토콜을 활용하면 어느 정도 정해진 틀이 있기 때문에 상대적으로 파일에 비해서 쉽게 활용할 수 있다.(Java의 Socket API, httpServer 등) 여기서 한 번 더 제약(약속)을 걸어서 Socket 통신 기반으로 RESTful 스타일의 통신을 할 수 있다.(Resource에 대한 CRUD, Collection Pattern)  
   -> 통신할 때 제약이 있다는 것이 포인트다.
 
 - RPC :
-  Socket을 기반으로 RESTful한 통신을 할 때와 다르게 `제약이 없다`고 볼 수 있다. 즉 한마디로 RESTful하지 않다. Java에선 RPC를 위해 [RMI(Remote Method Invocation)](./rmi.md)란 기술을 제공한다. RPC(SOAP의 일반적 활용)와 RESTful의 차이점은 뒤에서 보충하겠다.  
-  사실 우리가 웹에서 사용하는 기술은 광의의 RPC 개념이 들어가있다. 원격으로 프로시저를 호출하긴 하니까.. RMI라는 개념은 예전에 분산 환경에서 로컬에서도 객체를 사용하고, 원격에서도 객체를 사용하는 상황을 위해서 만들어졌다. 원격의 객체를 그냥 호출한다는 점에서굉장히 `Free`하다고 볼 수 있다.
+  Socket을 기반으로 RESTful한 통신을 할 때와 다르게 `제약이 없다`고 볼 수 있다. 즉 RESTful 스타일을 만족하지 않는다. Java에선 RPC를 위해 [RMI(Remote Method Invocation)](./rmi.md)란 기술을 제공한다. RPC(SOAP의 일반적 활용)와 RESTful의 차이점은 뒤에서 보충하겠다.  
+  사실 우리가 웹에서 사용하는 기술은 광의의 RPC 개념이 들어가있다. 원격으로 프로시저를 호출하긴 하니까.. RMI라는 개념은 예전에 분산 환경에서 로컬에서도 객체를 사용하고, 원격에서도 객체를 사용하는 상황을 위해서 만들어졌다. 원격의 객체를 그냥 호출한다는 점에서 굉장히 `Free`하다고 볼 수 있다.
   REST는 그래서 객체 지향 관점에서는 퇴보한 방식이라고 볼 수 있다. 리소스에 대한 접근이라는 제약이 걸리기 때문이다.
 
 #### 왜 DTO를 사용하는가
