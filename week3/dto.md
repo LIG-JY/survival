@@ -40,7 +40,7 @@ remote interface에서 통신하는 것은 비싸다..? 이렇게 2개의 내용
   -> 통신할 때 제약이 있다는 것이 포인트다.
 
 - RPC :
-  Socket을 기반으로 RESTful한 통신을 할 때와 다르게 `제약이 없다`고 볼 수 있다. 즉 한마디로 RESTful하지 않다. Java에선 RPC를 위해 RMI(Remote Method Invocation)란 기술을 제공한다. RPC(SOAP의 일반적 활용)와 RESTful의 차이점은 뒤에서 보충하겠다.  
+  Socket을 기반으로 RESTful한 통신을 할 때와 다르게 `제약이 없다`고 볼 수 있다. 즉 한마디로 RESTful하지 않다. Java에선 RPC를 위해 [RMI(Remote Method Invocation)](./rmi.md)란 기술을 제공한다. RPC(SOAP의 일반적 활용)와 RESTful의 차이점은 뒤에서 보충하겠다.  
   사실 우리가 웹에서 사용하는 기술은 광의의 RPC 개념이 들어가있다. 원격으로 프로시저를 호출하긴 하니까.. RMI라는 개념은 예전에 분산 환경에서 로컬에서도 객체를 사용하고, 원격에서도 객체를 사용하는 상황을 위해서 만들어졌다. 원격의 객체를 그냥 호출한다는 점에서굉장히 `Free`하다고 볼 수 있다.
   REST는 그래서 객체 지향 관점에서는 퇴보한 방식이라고 볼 수 있다. 리소스에 대한 접근이라는 제약이 걸리기 때문이다.
 
@@ -69,7 +69,7 @@ REST에서 핵심이 되는 것은 리소스와 표현이다. 표현에서 무�
 
 - B/E와 DB사이에도 데이터 전송을 위해서 DTO 객체가 사용된다. 아주 예전에는 Value Object를 DTO란 의미로 썼지만, 빠르게 Transfer Object로 정정했다.
   - 한국의 오래된 SI 기업에서는 VO(Value Object)를 DTO란 의미로 사용한다. (DAO와 VO를 쓰고 있다면 대부분 여기에 속한다.) 결국 여기서 DTO는 B/E와 DB사이의 데이터를 말한다.
-- JPA를 지양하고 DDD를 따르는 사람 중 일부는 ORM(JPA, 하이버네이트) Active Record + DTO처럼 접근하기도 한다.
+- JPA를 지양하고 DDD를 따르는 사람 중 일부는 ORM(JPA, 하이버네이트) [Active Record](./active-record.md) + DTO처럼 접근하기도 한다.
 
 - Data Transfer의 개념에 집중하면 원격이 아닌 경우에도 DTO를 사용할 수 있다.
   - 마틴 파울러의 정의에 따르면 원격에서 정의된다.
@@ -220,101 +220,3 @@ public final class Rectangle {
 ```
 
 이렇게 getter와 유사한 프로퍼티 메서드를 자바 컴파일러는 생성한다. 필드와 이름이 똑같다.
-
-### Active Record
-
-[Active Record Pattern](https://www.martinfowler.com/eaaCatalog/activeRecord.html)
-
-[Wiki](https://ko.wikipedia.org/wiki/%EC%95%A1%ED%8B%B0%EB%B8%8C_%EB%A0%88%EC%BD%94%EB%93%9C_%ED%8C%A8%ED%84%B4)
-
-Java와 Hibernate의 예시를 살펴보자
-
-```<java>
-import javax.persistence.*;
-
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "email", unique = true)
-    private String email;
-
-    // 기본 생성자와 게터/세터는 생략
-}
-```
-
-```<hibernate.cfg.xml>
-<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
-<hibernate-configuration>
-
-    <session-factory>
-        <!-- 데이터베이스 연결 정보 -->
-        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/your_database</property>
-        <property name="hibernate.connection.username">your_username</property>
-        <property name="hibernate.connection.password">your_password</property>
-
-        <!-- Hibernate 사용 시 SQL 출력 -->
-        <property name="hibernate.show_sql">true</property>
-
-        <!-- Hibernate 사용 시 DDL을 자동으로 생성 -->
-        <property name="hibernate.hbm2ddl.auto">update</property>
-
-        <!-- 데이터베이스 방언 설정 -->
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-
-        <!-- User 클래스 위치 지정 -->
-        <mapping class="your.package.path.User"/>
-    </session-factory>
-</hibernate-configuration>
-```
-
-```<java>
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-
-public class Main {
-    public static void main(String[] args) {
-        // Hibernate 설정 가져오기
-        Configuration configuration = new Configuration().configure();
-
-        // SessionFactory 생성
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-
-        // Session 열기
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-
-            // 새로운 사용자 생성
-            User newUser = new User();
-            newUser.setName("John Doe");
-            newUser.setEmail("john@example.com");
-            session.save(newUser);
-
-            // 사용자 조회
-            User foundUser = session.get(User.class, newUser.getId());
-            System.out.println("Found User: " + foundUser.getName() + ", " + foundUser.getEmail());
-
-            // 사용자 업데이트
-            foundUser.setEmail("john.doe@example.com");
-            session.update(foundUser);
-
-            // 사용자 삭제
-            session.delete(foundUser);
-
-            transaction.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-```

@@ -22,8 +22,6 @@
 
 - [3주차](week3/README.md)
 
-  - [1. REST API]()
-  - [2. URI & MIME type]()
-  - [3. Collection Pattern]()
-  - [4. Collection Pattern 적용]()
-  - [부록 1. RMI]()
+  - [1. DTO](./week3/dto.md)
+  - [부록 1. RMI](./week3/rmi.md)
+  - [부록 2. Active Record](./week3/active-record.md)
