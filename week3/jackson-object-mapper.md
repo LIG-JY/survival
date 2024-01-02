@@ -205,13 +205,19 @@ public class PostController {
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public String create(@RequestBody String body) throws JacksonException {
+        // String to DTO
         PostDto postDto = objectMapper.readValue(body, PostDto.class);
         return postDto.getId() + postDto.getTitle() + postDto.getContent();
     }
 }
 ```
 
-이제 POST 요청을 해보자
+이제 POST 요청을 해보자  
+메서드 함수 인자에 [@RequestBody](https://docs.spring.io/spring-framework/reference/web/webflux/controller/ann-methods/requestbody.html)를 잊지말자. 이게 없으면 요청에서 body에 Json 형태로 보내도 spring boot에서 인식하지 못한다.
+
+> @RequestBody 어노테이션은 Spring MVC에서 사용되며, HTTP 요청의 본문(body)을 자바 객체로 매핑(deserialize)할 때 사용됩니다. 이 어노테이션을 사용하지 않으면 Spring은 기본적으로 요청의 본문을 해석하지 않습니다.예를 들어, @RequestBody 없이 메소드 파라미터(함수 인자)에 `객체`를 사용하면 Spring은 해당 객체를 찾을 수 없어서 해당 파라미터는 null이 됩니다. 따라서 클라이언트에서 보낸 데이터를 읽어들이지 못하게 됩니다.
+
+그리고 `DTO에 필드에 대한 setter을 추가`하자. 스프링에서 Json String을 읽고 DTO 객체를 만들 때 생성 후 setter을 통해서 필드 값을 주입한다.
 
 ```<bash>
 >>> httpie
@@ -230,6 +236,10 @@ Keep-Alive: timeout=60
 지금 PostDTO에 getContent 메서드에 @JsonProperty("다른 이름") 이렇게 어노테이션이 있어서 요청 시 Json의 프로퍼티에 이와 일치하는 "다른 이름"이라는 프로퍼티를 넣어주어야한다.
 
 무심코 content로 프로퍼티 명을 지정하면 null이 나온다.
+
+잠깐 여기서 httpie에서 요청을 보낼 때 Json String으로 기본으로 보내진 것을 알 수 있다. [httpie default behavior](https://httpie.io/docs/cli/default-behavior)
+위 문서에 따르면 --json 플래그로 명시해주는 방법도 있다고 하니 참고하자.  
+`http POST localhost:8080/posts/ id=3 title=gg "다른 이름"=ㅎㅎ --json` 이런식으로 말이다.
 
 ```<bash>
 http POST localhost:8080/posts/ id=3 title=gg content=ㅎㅎ

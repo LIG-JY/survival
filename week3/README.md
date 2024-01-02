@@ -14,11 +14,12 @@ F/E는 사용자의 입력을 받아 B/E에 요청하고, B/E는 요청을 처�
 
 ## 목차
 
-1. [1. DTO](./dto.md)
-2. [2. 직렬화](./serialization.md)
-3. [3. Jackson ObjectMapper](./jackson-object-mapper.md)
-4. [4. CORS](./cors.md)
+1. [DTO](./dto.md)
+2. [직렬화](./serialization.md)
+3. [Jackson ObjectMapper](./jackson-object-mapper.md)
+4. [CORS](./cors.md)
 5. [부록1. RMI](./rmi.md)
+6. [부록2 Active Record](./active-record.md)
 
 ## keyword
 
@@ -32,3 +33,24 @@ F/E는 사용자의 입력을 받아 B/E에 요청하고, B/E는 요청을 처�
 - Java의 record
 - DAO
 - ORM
+
+### 직렬화
+
+- 직렬화(Serialization)
+- 마샬링
+- JSON
+
+### Jackson ObjectMapper
+
+- Jackson ObjectMapper 란
+- ObjectMapper
+- `@JsonProperty`
+
+### CORS
+
+- CORS 란
+  - 동일 출처 정책
+  - JSONP
+  - `Access-Control-Allow-Origin`
+- `@CrossOrigin`
+- `WebMvcConfigurer`
