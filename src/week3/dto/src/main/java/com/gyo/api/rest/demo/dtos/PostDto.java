@@ -1,7 +1,5 @@
 package com.gyo.api.rest.demo.dtos;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class PostDto {
 
     private String id;
@@ -29,8 +27,6 @@ public class PostDto {
         return title;
     }
 
-    // JsonProperty 어노테이션을 사용하면 JSON으로 변환할 때 특정 필드(key)의 이름을 변경할 수 있다.
-    @JsonProperty("다른 이름")
     public String getContent() {
         return content;
     }

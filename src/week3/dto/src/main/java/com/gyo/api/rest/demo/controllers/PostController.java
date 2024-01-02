@@ -2,6 +2,7 @@ package com.gyo.api.rest.demo.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gyo.api.rest.demo.dtos.PostDto;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,11 @@ public class PostController {
     }
 
     // Read
-    public List<PostDto> list() {
+    @GetMapping("")
+    public List<PostDto> list(HttpServletResponse response) {
+
+        response.addHeader("Access-Control-Allow-Origin", "*");
+
         return List.of(
                 new PostDto("1", "제목1", "내용1"),
                 new PostDto("2", "제목2", "내용2"),
@@ -41,7 +46,7 @@ public class PostController {
     }
 
     // Create
-    @PostMapping("/")
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public String create(@RequestBody PostDto body) {
         return body.getId() + body.getContent() + body.getTitle();
