@@ -19,7 +19,7 @@ F/E는 사용자의 입력을 받아 B/E에 요청하고, B/E는 요청을 처�
 3. [Jackson ObjectMapper](./jackson-object-mapper.md)
 4. [CORS](./cors.md)
 5. [부록1. RMI](./rmi.md)
-6. [부록2 Active Record](./active-record.md)
+6. [부록2. Active Record](./active-record.md)
 
 ## keyword
 
