@@ -1,6 +1,7 @@
 package com.gyo.api.rest.demo.application;
 
 import com.github.f4b6a3.ulid.UlidCreator;
+import com.gyo.api.rest.demo.daos.PostDAO;
 import com.gyo.api.rest.demo.daos.PostMapDAO;
 import com.gyo.api.rest.demo.dtos.PostDto;
 
@@ -8,18 +9,19 @@ import java.util.List;
 
 public class PostService {
 
-    private final PostMapDAO postMapDAO;
+    private final PostDAO postDAO;
 
     public PostService() {
-        this.postMapDAO = new PostMapDAO();
+        // 인터페이스만 알면 좋은데 구현도 알게되서 아쉽다.
+        this.postDAO = new PostMapDAO();
     }
 
     public List<PostDto> list() {
-        return this.postMapDAO.findAll();
+        return this.postDAO.findAll();
     }
 
     public PostDto detail(String id) {
-        return this.postMapDAO.find(id);
+        return this.postDAO.find(id);
     }
 
     public PostDto create(PostDto body) {
@@ -29,13 +31,13 @@ public class PostService {
         PostDto newPostDto = new PostDto(id, body.getTitle(), body.getContent());
 
         // DAO에 저장한다.
-        this.postMapDAO.save(newPostDto);
+        this.postDAO.save(newPostDto);
 
         return newPostDto;
     }
 
     public PostDto updatePost(String id, PostDto body) {
-        PostDto foundPost = this.postMapDAO.find(id);
+        PostDto foundPost = this.postDAO.find(id);
 
         foundPost.setId(id);
         foundPost.setTitle(body.getTitle());
@@ -45,6 +47,6 @@ public class PostService {
     }
 
     public void deletePost(String id) {
-        this.postMapDAO.delete(id);
+        this.postDAO.delete(id);
     }
 }

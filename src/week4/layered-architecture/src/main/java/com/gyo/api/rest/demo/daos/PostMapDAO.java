@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PostMapDAO {
+public class PostMapDAO implements PostDAO {
     private final Map<String, PostDto> postDtoMap;
 
     public PostMapDAO() {
@@ -16,11 +16,13 @@ public class PostMapDAO {
         this.postDtoMap.put("1", new PostDto("1", "title1", "content1"));
     }
 
+    @Override
     public List<PostDto> findAll() {
         // ID 순으로 정렬되지 않는다. HashMap의 특징이다.
         return new ArrayList<>(this.postDtoMap.values());
     }
 
+    @Override
     public PostDto find(String id) {
         PostDto found = this.postDtoMap.get(id);
         // 못 찾을 경우 예외를 던진다.
@@ -30,10 +32,12 @@ public class PostMapDAO {
         return found;
     }
 
+    @Override
     public void save(PostDto postDto) {
         this.postDtoMap.put(postDto.getId(), postDto);
     }
 
+    @Override
     public void delete(String id) {
         this.postDtoMap.remove(id);
     }
