@@ -1,35 +1,41 @@
 package com.gyo.api.rest.demo.application;
 
 import com.github.f4b6a3.ulid.UlidCreator;
+import com.gyo.api.rest.demo.daos.PostDAO;
 import com.gyo.api.rest.demo.dtos.PostDto;
-import com.gyo.api.rest.demo.exceptions.PostNotFoundException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PostService {
 
-    private final List<PostDto> postDtoList = new ArrayList<>();
+    private final PostDAO postDAO;
+
+    public PostService() {
+        this.postDAO = new PostDAO();
+    }
 
     public List<PostDto> list() {
-        return this.postDtoList;
+        return this.postDAO.findAll();
     }
 
     public PostDto detail(String id) {
-        return findPost(id);
+        return this.postDAO.find(id);
     }
 
     public PostDto create(PostDto body) {
-        // Post 추가 기능
-        String id = UlidCreator.getUlid().toString();
-        body.setId(id);
-        this.postDtoList.add(body);
 
-        return body;
+        // 원본 body를 수정하지 않는다.
+        String id = UlidCreator.getUlid().toString();
+        PostDto newPostDto = new PostDto(id, body.getTitle(), body.getContent());
+
+        // DAO에 저장한다.
+        this.postDAO.save(newPostDto);
+
+        return newPostDto;
     }
 
     public PostDto updatePost(String id, PostDto body) {
-        PostDto foundPost = findPost(id);
+        PostDto foundPost = this.postDAO.find(id);
 
         foundPost.setId(id);
         foundPost.setTitle(body.getTitle());
@@ -39,14 +45,6 @@ public class PostService {
     }
 
     public void deletePost(String id) {
-        PostDto foundPost = findPost(id);
-        this.postDtoList.remove(foundPost);
-    }
-
-    private PostDto findPost(String id) {
-        return postDtoList.stream()
-                .filter(postDto -> postDto.getId().equals(id))
-                .findFirst()
-                .orElseThrow(PostNotFoundException::new);
+        this.postDAO.delete(id);
     }
 }
