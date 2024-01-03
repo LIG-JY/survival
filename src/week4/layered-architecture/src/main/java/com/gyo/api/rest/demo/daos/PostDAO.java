@@ -16,7 +16,8 @@ public class PostDAO {
     }
 
     public List<PostDto> findAll() {
-        return this.postDtoList;
+        // 읽기 전용 반환
+        return new ArrayList<>(this.postDtoList);
     }
 
     public PostDto find(String id) {
