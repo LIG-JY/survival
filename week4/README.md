@@ -24,22 +24,8 @@
 - Layered Atchitecture
 - UUID
 
-### 직렬화
+### Data Access
 
-- 직렬화(Serialization)
-- 마샬링
-- JSON
-
-### Jackson ObjectMapper
-
-- Jackson ObjectMapper 란
-- ObjectMapper
-- `@JsonProperty`
-
-### CORS
-
-- CORS 란
-  - 동일 출처 정책
-  - JSONP
-  - `Access-Control-Allow-Origin`
-- `@CrossOrigin`
+- DAO
+- Java List
+- Java Map
