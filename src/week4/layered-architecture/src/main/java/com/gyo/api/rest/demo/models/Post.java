@@ -1,11 +1,11 @@
 package com.gyo.api.rest.demo.models;
 
 public class Post {
-    private long id;
+    private PostId id;
     private String title;
-    private String content;
+    private MultilineText content;
 
-    public Post(long id, String title, String content) {
+    public Post(PostId id, String title, MultilineText content) {
         this.id = id;
         this.title = title;
         this.content = content;
