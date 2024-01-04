@@ -1,5 +1,7 @@
 package com.gyo.api.rest.demo.models;
 
+import com.github.f4b6a3.tsid.TsidCreator;
+
 import java.util.Objects;
 
 public class PostId {
@@ -8,6 +10,14 @@ public class PostId {
 
     public PostId(String id) {
         this.id = id;
+    }
+
+    public static PostId of(String number) {
+        return new PostId(number);
+    }
+
+    public static PostId generate() {
+        return new PostId(TsidCreator.getTsid().toString());
     }
 
     @Override
@@ -21,5 +31,10 @@ public class PostId {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return id;
     }
 }

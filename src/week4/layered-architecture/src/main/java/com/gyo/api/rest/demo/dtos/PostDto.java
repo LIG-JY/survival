@@ -1,5 +1,7 @@
 package com.gyo.api.rest.demo.dtos;
 
+import com.gyo.api.rest.demo.models.Post;
+
 public class PostDto {
 
     private String id;
@@ -10,6 +12,11 @@ public class PostDto {
 
     // Java Beans 규약을 따르는 클래스는 기본 생성자가 필요하다.
     public PostDto() {
+    }
+
+    // Domain -> DTO
+    public PostDto(Post post) {
+        this(post.id().toString(), post.title(), post.content().toString());
     }
 
     public PostDto(String id, String title, String content) {

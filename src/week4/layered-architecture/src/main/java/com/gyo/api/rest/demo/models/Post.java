@@ -10,4 +10,28 @@ public class Post {
         this.title = title;
         this.content = content;
     }
+
+    public Post(String title, MultilineText content) {
+        this.id = PostId.generate();
+        this.title = title;
+        this.content = content;
+    }
+
+    // getter
+    public PostId id() {
+        return id;
+    }
+
+    public String title() {
+        return title;
+    }
+
+    public MultilineText content() {
+        return content;
+    }
+
+    public void update(String title, MultilineText content) {
+        this.title = title;
+        this.content = content;
+    }
 }

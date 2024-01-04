@@ -10,6 +10,10 @@ public class MultilineText {
         this.lines = List.of(text.split("\n"));
     }
 
+    public static MultilineText of(String content) {
+        return new MultilineText(content);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

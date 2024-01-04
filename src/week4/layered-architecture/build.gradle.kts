@@ -20,6 +20,7 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("com.github.f4b6a3:ulid-creator:5.1.0")
+    implementation("com.github.f4b6a3:tsid-creator:5.1.0")
 }
 
 tasks.withType<Test> {
