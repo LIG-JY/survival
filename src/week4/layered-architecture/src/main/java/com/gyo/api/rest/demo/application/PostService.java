@@ -5,6 +5,7 @@ import com.gyo.api.rest.demo.daos.PostMapDAO;
 import com.gyo.api.rest.demo.dtos.PostDto;
 import com.gyo.api.rest.demo.models.MultilineText;
 import com.gyo.api.rest.demo.models.Post;
+import com.gyo.api.rest.demo.models.PostId;
 import com.gyo.api.rest.demo.repositories.PostRepository;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class PostService {
     public PostDto detail(String id) {
 
         // 도메인 찾기
-        Post found = this.postRepository.find(id);
+        Post found = this.postRepository.find(PostId.of(id));
 
         // 도메인을 DTO로 변환한다.
         return new PostDto(found);
@@ -58,7 +59,7 @@ public class PostService {
     public PostDto updatePost(String id, PostDto body) {
 
         // 도메인을 찾는다.
-        Post foundPost = this.postRepository.find(id);
+        Post foundPost = this.postRepository.find(PostId.of(id));
 
         // 도메인을 수정한다.
         foundPost.update(
@@ -72,7 +73,7 @@ public class PostService {
     public void deletePost(String id) {
 
         // 도메인을 찾는다.
-        Post foundPost = this.postRepository.find(id);
+        Post foundPost = this.postRepository.find(PostId.of(id));
 
         // 도메인을 삭제한다.
         this.postRepository.delete(foundPost);

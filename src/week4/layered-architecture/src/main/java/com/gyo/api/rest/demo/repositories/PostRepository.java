@@ -25,8 +25,8 @@ public class PostRepository {
         return new ArrayList<>(posts.values());
     }
 
-    public Post find(String id) {
-        Post post = posts.get(PostId.of(id));
+    public Post find(PostId id) {
+        Post post = posts.get(id);
         if (post == null) {
             throw new PostNotFoundException();
         }
