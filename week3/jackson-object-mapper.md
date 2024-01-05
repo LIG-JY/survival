@@ -10,6 +10,7 @@ Jackson ObjectMapper를 사용해서 DTO를 JSON(문자열)으로 변환하거�
 
 - JSON의 스키마를 작성한다는 느낌으로 만들면 된다.
 - Json 문자열의 프로퍼티는 getter 메서드의 이름을 따른다는 점에 주의하자.
+  - 예를들어 getTitle이면 프로퍼티(key)의 이름은 title이다.
 - 만약 프로퍼티 이름을 강제하고 싶다면 @JsonProperty 애노테이션을 사용하자.
 
 ```<java>
@@ -55,7 +56,7 @@ public class PostDto {
 
 2.Spring DI를 통해 컨트롤러에서 Jackson ObjectMapper를 얻는다. 스프링 프레임워크(DI container)은 등록된 객체(Bean)를 관리하고 있고, 생성자에 명시하면 받아서 사용할 수 있다.
 
-- 사용=의존성/의존관계를 주입 받는 것을 말함(Dependency Injection).
+참고로 사용=의존성/의존관계를 주입 받는 것을 말함(Dependency Injection).
 
 Jackson ObjectMapper를 써서 DTO를 JSON 포맷의 String으로 변환한다. JsonProcessingException 예외가 발생할 수 있는데, 여기서는 간단히 JacksonException(상위 예외임) 예외를 사용한다.
 
