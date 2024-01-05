@@ -70,9 +70,13 @@ DAO가 데이터를 관리한다면, Repository는 도메인 모델을 관리한
 
 #### 데이터베이스 주도 개발
 
-예전 기술을 사용하는 조직의 경우 ERD를 먼저 그리고(table, field, schema..등 결정) 그리고 나서 DAO와 VO(DTO)를 사용하는 방식으로 개발한다. 즉 데이터베이스 주도 개발이다. 이렇게 만들면 도메인 모델이 사실상 없다. 어플리케이션 레이어와 구분되지 않는다. dao는 set,get만 할 뿐 행위라고 부를만한 것은 하지 않는다.
+예전 기술을 사용하는 조직의 경우 ERD를 먼저 그리고(table, field, schema..등 결정) 그리고 나서 DAO와 VO(DTO)를 사용하는 방식으로 개발한다. 즉 데이터베이스 주도 개발이다. 이렇게 만들면 도메인 모델이 사실상 없다고 볼 수 있다. 따라서 다음과 같은 특징을 가진다.
 
-DB가 바뀌면 프로그램이 바뀌게 된다.
+- 도메인 레이어가 어플리케이션 레이어와 구분되지 않는다.
+
+- dao는 set,get만 할 뿐 행위라고 부를만한 것은 하지 않는다.
+
+- DB가 바뀌면 프로그램이 바뀌게 된다.
 
 #### DDD
 
@@ -336,8 +340,8 @@ public List<PostDto> list() {
 
 >> PostRepository
 
-public Post find(String id) {
-        return posts.get(PostId.of(id));
+public Post find(PostId id) {
+        return posts.get(id);
     }
 ```
 
@@ -348,7 +352,7 @@ public Post find(String id) {
 public PostDto detail(String id) {
 
         // 도메인 찾기
-        Post found = this.postRepository.find(id);
+        Post found = this.postRepository.find(PostId.of(id));
 
         // 도메인을 DTO로 변환한다.
         return new PostDto(found);
@@ -439,7 +443,7 @@ public void save(Post newPost) {
 public PostDto updatePost(String id, PostDto body) {
 
         // 도메인을 찾는다.
-        Post foundPost = this.postRepository.find(id);
+        Post foundPost = this.postRepository.find(PostId.of(id));
 
         // 도메인을 수정한다.
         foundPost.update(
@@ -469,7 +473,7 @@ public void update(String title, MultilineText content) {
 public void deletePost(String id) {
 
         // 도메인을 찾는다.
-        Post foundPost = this.postRepository.find(id);
+        Post foundPost = this.postRepository.find(PostId.of(id));
 
         // 도메인을 삭제한다.
         this.postRepository.delete(foundPost);
@@ -493,7 +497,3 @@ public void delete(Post post) {
   1. [Database Driven Development에서 진짜 DDD로의 선회 -1-](https://helloworld.kurly.com/blog/road-to-ddd/)
 
   2. [Database Driven Development에서 진짜 DDD로의 선회, 이벤트 스토밍 -2-](https://helloworld.kurly.com/blog/event-storming/)
-
-```
-
-```
