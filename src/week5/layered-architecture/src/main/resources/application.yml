@@ -1,0 +1,4 @@
+server:
+  error:
+    include-exception: false
+    include-stacktrace: on_param
