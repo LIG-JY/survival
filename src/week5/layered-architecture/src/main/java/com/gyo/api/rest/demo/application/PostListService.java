@@ -1,20 +1,17 @@
 package com.gyo.api.rest.demo.application;
 
-import com.gyo.api.rest.demo.Factory;
 import com.gyo.api.rest.demo.dtos.PostDto;
 import com.gyo.api.rest.demo.models.Post;
 import com.gyo.api.rest.demo.repositories.PostRepository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class PostListService {
 
     private final PostRepository postRepository;
 
-    public PostListService() {
-        this.postRepository = Factory.postRepository();
+    public PostListService(PostRepository postRepository) {
+        this.postRepository = postRepository;
     }
 
     public List<PostDto> list() {

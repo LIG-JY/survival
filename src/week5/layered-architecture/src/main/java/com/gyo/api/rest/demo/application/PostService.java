@@ -1,20 +1,17 @@
 package com.gyo.api.rest.demo.application;
 
-import com.gyo.api.rest.demo.Factory;
 import com.gyo.api.rest.demo.dtos.PostDto;
 import com.gyo.api.rest.demo.models.MultilineText;
 import com.gyo.api.rest.demo.models.Post;
 import com.gyo.api.rest.demo.models.PostId;
 import com.gyo.api.rest.demo.repositories.PostRepository;
-import org.springframework.stereotype.Service;
 
-@Service
 public class PostService {
 
     private final PostRepository postRepository;
 
-    public PostService() {
-        this.postRepository = Factory.postRepository();
+    public PostService(PostRepository postRepository) {
+        this.postRepository = postRepository;
     }
 
     public PostDto detail(String id) {
