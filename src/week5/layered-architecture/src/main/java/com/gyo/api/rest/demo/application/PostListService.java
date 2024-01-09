@@ -3,9 +3,11 @@ package com.gyo.api.rest.demo.application;
 import com.gyo.api.rest.demo.dtos.PostDto;
 import com.gyo.api.rest.demo.models.Post;
 import com.gyo.api.rest.demo.repositories.PostRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class PostListService {
 
     private final PostRepository postRepository;

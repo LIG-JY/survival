@@ -3,11 +3,9 @@ package com.gyo.api.rest.demo;
 import com.gyo.api.rest.demo.application.PostListService;
 import com.gyo.api.rest.demo.application.PostService;
 import com.gyo.api.rest.demo.controllers.PostController;
-import com.gyo.api.rest.demo.repositories.PostRepository;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -28,23 +26,4 @@ public class DemoApplication {
 
 //        SpringApplication.run(DemoApplication.class, args);
     }
-
-    @Bean
-    PostService postService() {
-        return new PostService(postRepository());
-    }
-
-    @Bean
-    PostListService postListService() {
-        return new PostListService(postRepository());
-    }
-
-    @Bean
-    PostRepository postRepository() {
-        System.out.println("*".repeat(80));
-        System.out.println("PostRepository 생성");
-        System.out.println("*".repeat(80));
-        return new PostRepository();
-    }
-
 }
