@@ -6,7 +6,9 @@ import com.gyo.api.rest.demo.models.MultilineText;
 import com.gyo.api.rest.demo.models.Post;
 import com.gyo.api.rest.demo.models.PostId;
 import com.gyo.api.rest.demo.repositories.PostRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PostService {
 
     private final PostRepository postRepository;

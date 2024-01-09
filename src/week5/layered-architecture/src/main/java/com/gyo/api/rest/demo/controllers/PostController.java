@@ -20,8 +20,13 @@ import java.util.List;
 @RequestMapping("/posts")
 public class PostController {
 
-    private final PostService postService = new PostService();
-    private final PostListService postListService = new PostListService();
+    private final PostService postService;
+    private final PostListService postListService;
+
+    public PostController(PostService postService, PostListService postListService) {
+        this.postService = postService;
+        this.postListService = postListService;
+    }
 
     // Read
     @GetMapping("")
