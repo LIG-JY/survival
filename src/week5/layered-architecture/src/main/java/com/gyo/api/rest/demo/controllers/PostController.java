@@ -42,7 +42,7 @@ public class PostController {
     }
 
     // Create
-    @PostMapping("/")
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public PostDto create(@RequestBody PostDto body) {
         return this.postService.create(body);
