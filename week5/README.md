@@ -12,6 +12,8 @@
 2. [Unit Test](./unit-test.md)
 3. [Spring Test](./spring-test.md)
 4. [TDD](./tdd.md)
+5. [부록 : AssertJ](./assertj.md)
+6. [부록 : restTemplate의 메서드](./rest-template.md)
 
 ## keyword
 

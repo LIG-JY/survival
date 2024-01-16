@@ -41,3 +41,5 @@
   2. [Unit Test](./week5/unit-test.md)
   3. [Spring Test](./week5/spring-test.md)
   4. [TDD](./week5/tdd.md)
+  5. [부록 : AssertJ](./week5/assertj.md)
+  6. [부록 : restTemplate의 메서드](./week5/rest-template.md)
