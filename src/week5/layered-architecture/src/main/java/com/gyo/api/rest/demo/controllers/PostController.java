@@ -57,6 +57,7 @@ public class PostController {
 
     // Delete
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("id") String id) {
         this.postService.deletePost(id);
     }

@@ -146,6 +146,115 @@ private String findLastId(String body) {
 
 목록 조회해서 받아온 문자열(문자열의 값은 Json 형태)에서 정규식을 이용해 마지막 Post의 Id를 찾고 이 Id로 다시 delete 요청을 테스트하는 흐름이다.
 
+---
+
+### MockMvc를 이용한 테스트
+
+```<Java>
+package com.gyo.api.rest.demo.controllers;
+
+import com.gyo.api.rest.demo.repositories.PostRepository;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+class PostControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private PostRepository postRepository;
+
+    @Test
+    public void list() throws Exception {
+        this.mockMvc.perform(get("/posts"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("title1")
+                ));
+    }
+
+    @Test
+    public void create() throws Exception {
+        String json = """
+                {
+                	"title": "새 글",
+                	"content": "제곧내"
+                }
+                """;
+
+        int oldSize = postRepository.findAll().size();
+
+        this.mockMvc.perform(
+                        post("/posts")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json)
+                )
+                .andExpect(status().isCreated());
+
+        int newSize = postRepository.findAll().size();
+
+        assertThat(newSize).isEqualTo(oldSize + 1);
+    }
+
+    // Repository에 기본으로 Post(PostId.of("1"), "title1", MultilineText.of("content1"))) 존재
+    @Test
+    public void deletePost() throws Exception {
+
+        int oldSize = postRepository.findAll().size();
+
+        String id = "1";
+        this.mockMvc.perform(
+                        delete("/posts/" + id))
+                .andExpect(status().isOk());
+
+        int newSize = postRepository.findAll().size();
+        assertThat(newSize).isEqualTo(oldSize - 1);
+    }
+}
+```
+
+테스트 논리는 생성하고, 제거할 때 목록의 사이즈를 비교하는 것이다.
+
+#### static import로 코드 가독성을 높일 수 있다.
+
+```<Java>
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+```
+
+#### 참고 : 한글 인코딩 문제가 발생한다면
+
+인코딩 문제를 해결하기 위해 application.properties 파일에 관련 설정 추가.
+
+```<application.properties>
+server.servlet.encoding.charset=UTF-8
+server.servlet.encoding.force=true
+```
+
+MockMvc를 사용하면서 불편한 점은 알아야할 가정이 많다는 것이다. 기존에 레포지토리에 뭐가 있는지 알아야하며, 각각의 id, content와 같은 속성의 값까지 알아야한다...
+
+---
+
 ## 참고
 
 > [Testing](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html)
@@ -155,3 +264,7 @@ private String findLastId(String body) {
 > [Testing the Web Layer](https://spring.io/guides/gs/testing-web/)
 
 > [@Value](https://www.baeldung.com/spring-value-annotation)
+
+> [SpyBean](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/mock/mockito/SpyBean.html)
+
+> [TestDouble](https://martinfowler.com/bliki/TestDouble.html)
