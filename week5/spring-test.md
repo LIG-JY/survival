@@ -230,7 +230,7 @@ class PostControllerTest {
 
 테스트 논리는 생성하고, 제거할 때 목록의 사이즈를 비교하는 것이다.
 
-#### static import로 코드 가독성을 높일 수 있다.
+#### static import로 코드 가독성을 높일 수 있음
 
 ```<Java>
 import static org.assertj.core.api.Assertions.assertThat;
@@ -254,6 +254,98 @@ server.servlet.encoding.force=true
 MockMvc를 사용하면서 불편한 점은 알아야할 가정이 많다는 것이다. 기존에 레포지토리에 뭐가 있는지 알아야하며, 각각의 id, content와 같은 속성의 값까지 알아야한다...
 
 ---
+
+### SpyBean을 이용한 테스트
+
+> Spies are stubs that also record some information based on how they were called.
+
+Post 개수를 세는 방식, 즉 post 목록의 길이를 조회하는 방식이 아니라, 정말로 PostRepository의 save를 호출했는지만 확인해 보자.
+
+SpyBean을 이용하면 이를 확인할 수 있다. spy는 호출될 때 기록을 남기기 때문이다.
+
+```<Java>
+@SpringBootTest
+@AutoConfigureMockMvc
+class PostControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @SpyBean
+    private PostRepository postRepository;
+
+    @Test
+    public void list() throws Exception {
+        this.mockMvc.perform(get("/posts"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("title1")
+                ));
+
+        Mockito.verify(postRepository).findAll(); // findAll이 호출되었는지 확인
+    }
+
+    @Test
+    public void create() throws Exception {
+        String json = """
+                {
+                	"title": "새 글",
+                	"content": "제곧내"
+                }
+                """;
+
+        this.mockMvc.perform(
+                        post("/posts")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json)
+                )
+                .andExpect(status().isCreated());
+
+        Mockito.verify(postRepository).save(any(Post.class)); // save가 호출되었는지 확인
+    }
+
+    // Repository에 기본으로 Post(PostId.of("1"), "title1", MultilineText.of("content1"))) 존재
+    @Test
+    public void deletePost() throws Exception {
+        String id = "1";
+        this.mockMvc.perform(
+                        delete("/posts/" + id))
+                .andExpect(status().isOk());
+
+        Mockito.verify(postRepository).delete(any(Post.class)); // delete가 호출되었는지 확인
+    }
+}
+```
+
+verify를 통해서 SpyBean으로 주입받은 postRepository에서 save라는 메서드를 호출했는지 확인했다.  
+save에는 Post 타입의 인자가 들어가서 호출되야 한다.
+
+```<Java>
+@Test
+    public void create() throws Exception {
+        String json = """
+                {
+                	"title": "새 글",
+                	"content": "제곧내"
+                }
+                """;
+
+        this.mockMvc.perform(
+                        post("/posts")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json)
+                )
+                .andExpect(status().isCreated());
+
+        Mockito.verify(postRepository).save(argThat(
+                post -> {
+                    return post.title().equals("새 글");
+                }
+        )); // save가 호출되었는지 확인
+    }
+```
+
+argThat을 이용해서 인자로 들어오는 객체의 속성까지 확인할 수 있다.
 
 ## 참고
 
