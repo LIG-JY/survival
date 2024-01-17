@@ -15,6 +15,9 @@
 5. [부록 : AssertJ](./assertj.md)
 6. [부록 : restTemplate의 메서드](./rest-template.md)
 7. [부록 : 정규표현식](./regular-expression.md)
+8. [부록 : MockBean](./mock-bean.md)
+9. [부록 : SpyBean](./spy-bean.md)
+10. [부록 : given](./given.md)
 
 ## keyword
 

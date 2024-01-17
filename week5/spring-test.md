@@ -347,6 +347,252 @@ save에는 Post 타입의 인자가 들어가서 호출되야 한다.
 
 argThat을 이용해서 인자로 들어오는 객체의 속성까지 확인할 수 있다.
 
+argThat의 매개변수를 확인해보자. 메서드 구현은 다음과 같다.
+
+```<Java>
+public static <T> T argThat(ArgumentMatcher<T> matcher) {
+        reportMatcher(matcher);
+        return null;
+    }
+```
+
+ArgumentMatcher의 구현은 아래와 같다.
+
+```<Java>
+@FunctionalInterface
+public interface ArgumentMatcher<T> {
+    boolean matches(T var1);
+
+    default Class<?> type() {
+        return Void.class;
+    }
+}
+```
+
+유일한 추상 메서드를 가진 함수형 인터페이스이다. 때문에 argThat에 람다식을 인자로 넘길 수 있다.
+
+### 리플렉션 활용
+
+getter을 사용하기 싫다면 reflection을 활용할 수도 있다. (오버 엔지니어링)
+
+```<Java>
+@Test
+    public void create() throws Exception {
+        String json = """
+                {
+                	"title": "새 글",
+                	"content": "제곧내"
+                }
+                """;
+
+        this.mockMvc.perform(
+                        post("/posts")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json)
+                )
+                .andExpect(status().isCreated());
+
+        Mockito.verify(postRepository).save(argThat(
+                post -> {
+                    return getFieldValue(post, "title").equals("새 글")
+                            && getFieldValue(post, "content").equals(new MultilineText("제곧내"));
+                }
+        )); // save가 호출되었는지 확인
+    }
+
+
+private Object getFieldValue(Object object, String fieldName) {
+        try {
+            Field field = object.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            return field.get(object);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+```
+
+---
+
+### MockBean
+
+위의 테스트를 보면 controller(웹 레이어)에서 repository까지 너무 멀리 본다(?). 물론 이렇게 하는 것이 완전한 통합 테스트에서는 유리하다. (넓은 계층 범위에서 테스트 하는 것이 통합 테스트에 가까움)
+
+중간에 다른 레이어도 있는데 이를 활용하지 않는다. 이를 활용할 수 있는 방법을 찾아보자
+
+SpyBean(여기서는 PostRepository)으로 테스트하면 이와 관련된 것들이 싹 다 객체가 생성되서 올라가게 된다.
+
+MockBean은 가짜로 필요한 빈만 넣어주기 위해 사용한다. 이 빈은 실제 로직을 포함하지 않으며, 가짜 응답을 제공한다.
+
+#### - 사용법
+
+SpringBootTest는 모든 Bean들을 다 IOC 컨테이너에 넣어준다. 따라서 테스트에서 모든 빈을 다 얻을 수 있다.
+
+어노테이션을 @WebMvcTest로 변경하면 MockMvc 빈만 제공하고 나머지 빈은 제공하지 않는다.
+
+다른 코드는 똑같이 유지하고 클래스 레벨의 어노테이션만 변경하고 테스트를 실행해보자.
+
+```<Java>
+@WebMvcTest
+@AutoConfigureMockMvc
+class PostControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @SpyBean
+    private PostRepository postRepository;
+
+    @Test
+    public void list() throws Exception {
+        this.mockMvc.perform(get("/posts"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("title1")
+                ));
+
+        Mockito.verify(postRepository).findAll(); // findAll이 호출되었는지 확인
+    }
+
+    @Test
+    public void create() throws Exception {
+        String json = """
+                {
+                	"title": "새 글",
+                	"content": "제곧내"
+                }
+                """;
+
+        this.mockMvc.perform(
+                        post("/posts")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json)
+                )
+                .andExpect(status().isCreated());
+
+        Mockito.verify(postRepository).save(argThat(
+                post -> {
+                    return getFieldValue(post, "title").equals("새 글")
+                            && getFieldValue(post, "content").equals(new MultilineText("제곧내"));
+                }
+        )); // save가 호출되었는지 확인
+    }
+
+    // Repository에 기본으로 Post(PostId.of("1"), "title1", MultilineText.of("content1"))) 존재
+    @Test
+    public void deletePost() throws Exception {
+        String id = "1";
+        this.mockMvc.perform(
+                        delete("/posts/" + id))
+                .andExpect(status().isOk());
+
+        Mockito.verify(postRepository).delete(any(Post.class)); // delete가 호출되었는지 확인
+    }
+
+    private Object getFieldValue(Object object, String fieldName) {
+        try {
+            Field field = object.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            return field.get(object);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+```
+
+에러가 발생한다. 에러 로그를 확인해보자.
+
+```<bash>
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'postController' defined in file [/Users/gyo/studyroom/survival-backend-git-book/src/week5/layered-architecture/build/classes/java/main/com/gyo/api/rest/demo/controllers/PostController.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'com.gyo.api.rest.demo.application.PostService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+```
+
+PostController을 얻는데 실패했다.
+
+이제 어노테이션에 인자를 넘기고 다시 실행해보자
+
+```<Java>
+@WebMvcTest(PostController.class)
+```
+
+여전히 에러가 발생한다.
+
+```<Java>
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'postController' defined in file [/Users/gyo/studyroom/survival-backend-git-book/src/week5/layered-architecture/build/classes/java/main/com/gyo/api/rest/demo/controllers/PostController.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'com.gyo.api.rest.demo.application.PostService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+```
+
+에러 내용은 postController 빈을 생성하는데 실패했으며, 이유는 postController의 생성자에 필요한 값들이 들어오지 않았다는 것이다. 즉 의존성 주입이 되지 않았다.
+
+```<Post>
+public PostController(PostService postService, PostListService postListService) {
+        this.postService = postService;
+        this.postListService = postListService;
+    }
+```
+
+PostCotroller의 생성자를 보면 빈으로 postService와 postListService를 주입받아야 하지만 이를 주입받지 못했다. 이유는 클래스 레벨에 @WebMvcTest의 인자로 PostController을 전달함으로써, 테스트 환경에서 PostController 클래스와 관련된 컨트롤러, 필터, 인터셉터 등만 로드하고, 그 외의 전체 Spring 컨텍스트는 로드하지 않기 때문이다.
+
+이 상황에서 MockBean을 사용해 PostController에 필요한 빈을 넣어주어야 한다.
+
+그래서 아래와 같이 테스트 코드를 작성할 수 있다.
+
+```<Java>
+@WebMvcTest(PostController.class)
+@AutoConfigureMockMvc
+class PostControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private PostService postService;
+
+    @MockBean
+    private PostListService postListService;
+
+
+    @Test
+    public void list() throws Exception {
+        given(postListService.list()).willReturn(List.of(
+                new PostDto("1", "제목", "내용")
+        ));
+
+        this.mockMvc.perform(get("/posts"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("제목")
+                ));
+    }
+
+    @Test
+    public void create() throws Exception {
+        String json = """
+                {
+                	"title": "새 글",
+                	"content": "제곧내"
+                }
+                """;
+
+        this.mockMvc.perform(
+                        post("/posts")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json)
+                )
+                .andExpect(status().isCreated());
+
+        verify(postService).create(any(PostDto.class));
+    }
+}
+```
+
+#### ❗️ 여기서도 Mockito의 verify를 사용함
+
+헷갈리면 안 되는게, spybean을 사용할 때 verify를 사용하는게 아니다. 애초에 독립적인 개념이다. verify 메서드는 테스트 중에 특정 메서드가 호출되었는지, 호출되었다면 몇 번이나 호출되었는지 검증하는 데 사용됩니다.
+
+### - 정리
+
+controller의 역할만 확인하는 테스트다. 관심사를 웹 레이어로 집중한다. 결론적으로
+
 ## 참고
 
 > [Testing](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html)
