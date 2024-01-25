@@ -593,6 +593,43 @@ class PostControllerTest {
 
 controller의 역할만 확인하는 테스트다. 관심사를 웹 레이어로 집중한다. 결론적으로
 
+## memo
+
+### @MockBean vs mock() method
+
+- @MockBean Annotation
+  - Context: @MockBean is specific to Spring Boot and is used in the context of Spring's application context. It's part of the Spring Boot Test framework.
+
+  - Functionality: When you annotate a field with @MockBean in a test, Spring Boot replaces the bean of the same type in the Spring application context with a Mockito mock. This is very useful when you want to add or replace a bean in the Spring application context with a mock for testing.
+
+  - Scope: The mock will replace any existing bean of the same type in the entire Spring application context. Therefore, any Spring component that autowires this bean will get the mocked instance.
+
+  - Use Case: It is typically used in integration tests where you want to mock away external dependencies (like database repositories, web services, etc.) while testing your Spring components.
+
+- mock() Method
+  - Context: The mock() method is part of the Mockito framework and is not specific to Spring Boot. It can be used in any Java application.
+
+  - Functionality: This method creates a plain Mockito mock object of the given class or interface. It's not aware of the Spring context and doesn't affect the Spring application context.
+
+  - Scope: The scope of a mock created with mock() is limited to the test class where it's used. It doesn't replace any Spring beans in the context, and it's up to you to inject it into the object under test.
+  
+  - Use Case: It is commonly used in unit tests where you are testing a class in isolation and want to control its dependencies.
+  
+- Comparison
+  - Integration Testing vs. Unit Testing: @MockBean is more suited for integration tests within a Spring Boot environment, whereas mock() is typically used for plain unit tests without Spring Boot's involvement.
+
+  - Spring Context Awareness: @MockBean interacts with the Spring context, replacing beans globally, while mock() creates standalone mocks without any interaction with the Spring context.
+
+- Overhead: @MockBean can add more overhead to your tests since it involves the Spring context, making tests slower compared to plain unit tests using mock().
+
+### Mockito any vs eq
+
+[참고 자료](https://stackoverflow.com/questions/30890011/whats-the-difference-between-mockito-matchers-isa-any-eq-and-same)
+
+- any : 주어진 타입에 대해 어떤 구체적인 value든 상관없이 타입만 일치하면 된다.
+
+- eq : 타입과 함께 정확히 값도 비교한다. 이 때 타입의 equals 메서드를 통해 값을 비교하게 된다.
+
 ## 참고
 
 > [Testing](https://docs.spring.io/spring-framework/docs/current/reference/html/testing.html)
