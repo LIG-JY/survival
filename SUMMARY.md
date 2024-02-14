@@ -41,3 +41,12 @@
   2. [Unit Test](./week5/unit-test.md)
   3. [Spring Test](./week5/spring-test.md)
   4. [TDD](./week5/tdd.md)
+
+- [6주차](week6/README.md)
+
+  1. [Database](./week6/database.md)
+  2. [Relational Model](./week6/relational-model.md)
+  3. [Relation Algebra](./week6/relational-algebra.md)
+  4. [Entity-Relationship Model](./week6/entity-realationship-model.md)
+  5. [JDBC](./week6/jdbc.md)
+  6. [JdbcTemplate](./week6/jdbc-template.md)

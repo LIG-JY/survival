@@ -4,9 +4,23 @@
 
 RestTemplate의 원래 목적은 HTTP 클라이언트다. 따라서 실제로 HTTP 호출을 하게된다. 따라서 내부 서버(직접 제작한 스프링 어플리케이션) 뿐만아니라 외부 REST API에 데이터를 요청하거나 전송할 수 도 있다.
 
-MockMvc의 목적은 pring MVC 애플리케이션의 컨트롤러 계층을 테스트다. 실제 HTTP 서버를 구동하지 않고도 Spring MVC의 동작을 시뮬레이션 한다.
+MockMvc의 목적은 spring MVC 애플리케이션의 컨트롤러 계층을 테스트다. 실제 HTTP 서버를 구동하지 않고도 Spring MVC의 동작을 시뮬레이션 한다.
 
 MockMvc는 주로 Spring MVC 컨트롤러의 HTTP 요청 처리 로직을 테스트하는 데 사용됩니다. 이를 통해 컨트롤러가 올바른 뷰를 반환하는지, 모델에 적절한 속성이 추가되었는지 등을 검증할 수 있다.
+
+## 목적
+
+@MockMvcTest is a Spring Boot annotation used in unit testing and integration testing for web applications built with the Spring Framework. It's primarily used for testing `controllers and the web layer of your application` by setting up a MockMvc environment, which allows you to simulate HTTP requests and responses without actually starting a web server.   
+The purpose of @MockMvcTest is to simplify the testing of your Spring MVC controllers and their interactions with the Spring MVC framework.
+
+It creates a limited Spring application context that includes only the relevant components required for testing the web layer. This context is faster to initialize than a full application context.
+It sets up a MockMvc instance, which allows you to send mock HTTP requests to your controllers and receive mock HTTP responses for testing.
+It often focuses on testing the controller methods, the request mappings, request and response handling, and the interactions between the controller and other components like services.
+
+## 사용법
+
+To use @MockMvcTest, you typically annotate your test class with it and specify the controller classes you want to test by providing them as arguments to the annotation.
+Spring Boot will create a minimal application context containing only the relevant beans, such as the specified controller classes, and set up a MockMvc instance for you to use in your test methods.
 
 ## 메서드 사용법
 

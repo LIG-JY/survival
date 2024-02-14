@@ -171,11 +171,11 @@ Record 클래스 규칙은 아래와 같다.
 
 - 불변성(Immutable): Record 클래스는 생성된 후 수정될 수 없는 불변 객체다. 따라서 클래스 필드들은 final로 선언되어 값을 한 번 할당하면 변경할 수 없다.
 
-- 기본 생성자(Default Constructor): Record 클래스는 컴파일러에 의해 자동으로 기본 생성자가 생성되어 필드들을 초기화한다.
+- 기본 생성자(Default Constructor): Record 클래스는 컴파일러에 의해 자동으로 기본 생성자가 생성되어 필드들을 초기화한다. 이 때 생성자의 파라매터로 모든 필드를 가진다.
 
 - equals(), hashCode(), toString() 자동생성 : 필드들의 값에 기반하여 객체의 동등성(equality)을 확인하는 equals() 및 hashCode() 메소드, 그리고 객체의 문자열 표현을 반환하는 toString() 메소드를 생성한다.
 
-- 프로퍼티(Property): Record 클래스는 각 필드에 대한 "프로퍼티"를 자동으로 생성한다. 프로퍼티는 필드의 값을 읽는 메소드와, 해당 필드를 사용하여 새로운 객체를 생성하는 메소드를 포함한다. [예시](https://docs.oracle.com/en/java/javase/17/language/records.html#GUID-6699E26F-4A9B-4393-A08B-1E47D4B2D263)를 통해 확인하자.
+- 프로퍼티(Property): Record 클래스는 각 필드에 대한 "프로퍼티"를 자동으로 생성한다. 프로퍼티는 필드의 값을 읽는 메소드(Getter)와, 해당 필드를 사용하여 새로운 객체를 생성하는 메소드를 포함한다. [예시](https://docs.oracle.com/en/java/javase/17/language/records.html#GUID-6699E26F-4A9B-4393-A08B-1E47D4B2D263)를 통해 확인하자.
 
 ```<Java>
 public final class Rectangle {
@@ -204,3 +204,11 @@ public final class Rectangle {
 ```
 
 이렇게 getter와 유사한 프로퍼티 메서드를 자바 컴파일러는 생성한다. 필드와 이름이 똑같다.
+
+### Spring Web MVC에서 DTO
+
+- Content Negotiation and Message Converters: Spring MVC uses `HttpMessageConverters` to serialize and deserialize data formats (e.g., JSON, XML) to/from Java objects.  
+When you return a DTO from a controller method, Spring determines how to serialize the DTO based on the request's Accept header and the configured message converters.  
+This serialization process is why you can automatically return a DTO from a controller method, and Spring takes care of converting it into the appropriate format for the response.
+
+[HttpMessageConverters](https://www.baeldung.com/spring-httpmessageconverter-rest)가 DTO의 직렬화/역직렬화를 담당하며, Spring MVC는 이를 사용한다.
