@@ -4,7 +4,7 @@
 
 JdbcTemplate은 스프링 프레임워크에 포함된 관계형 데이터베이스와 상호작용하기 위한 모듈이다. JdbcTemplate은 JDBC를 추상화했다. 직접적으로 Jdbc를 사용하면 코드량이 많아지고 불편한 점이 발생한다. 따라서 JdbcTemplate을 사용해 편리하게 데이터베이스와 상호작용할 수 있다.
 
-## JDBC Test 방법
+## JdbcTemplate Test 방법
 
 Test Resource Root(green color directory)에서 JdbcTemplate를 주입받아서 테스트하면 된다.
 
@@ -259,11 +259,104 @@ public interface CommandLineRunner {
 
 method-level annotation `@Bean`은 스프링 어플리케이션이 실행되는 동안 return value를 빈으로 application context에 등록하게 된다. 이 때 메서드 이름인 commandLineRunner가 빈의 이름이 된다.
 
-CommandLineRunner은 함수형 인터페이스다. 함수형 인터페이스는 inner 익명 클래스 대신 람다 식을 통해 인터페이스를 구현할 수 있다. 이 때 람다식의 메서드 시그니처는 함수형 인터페이스의 유일한 추상 메서드의 메서드 시그니처와 동일하다. 즉 람다식은 `함수형 인터페이스의 유일한 추상 메서드를 구현`하게 된다.
+CommandLineRunner은 함수형 인터페이스다. 함수형 인터페이스는 inner 익명 클래스 대신 람다 식을 통해 인터페이스를 구현할 수 있다. `이 때 람다식의 메서드 시그니처는 함수형 인터페이스의 유일한 추상 메서드의 메서드 시그니처와 동일하다.` 즉 람다식은 `함수형 인터페이스의 유일한 추상 메서드를 구현`하게 된다.
 
 이런 함수형 인터페이스의 성질이 스프링의 메서드 레벨 어노테이션의 성질과 결합되어 CommandLineRunner 타입의 빈을 등록하는 것이다. CommandLineRunner 빈의 경우, Spring Boot 애플리케이션은 애플리케이션 시작 시 `자동으로` 이러한 CommandLineRunner 인스턴스를 찾아서 실행한다.
 
 위에서 설명한 것 처럼 CommandLineRunner는 Spring Boot가 제공하는 특별한 유형의 빈으로 부트 스트랩 이후 가장 먼저 생성되는 개체이기 때문이다.
+
+### CommandLineRunner class level component로 사용하기
+
+```Java
+public class AppRunner implements CommandLineRunner {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    public AppRunner(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @Override
+    public void run(String... args) {
+        String query = "SELECT * FROM people";
+
+        jdbcTemplate.query(query, rs -> {
+            rs.next();
+            String name = rs.getString("name");
+            System.out.println(name);
+        });
+    }
+
+}
+```
+
+#### Jdbc.query() 메서드 소스코드
+
+```Java
+@Nullable
+    <T> T query(String sql, ResultSetExtractor<T> rse) throws DataAccessException;
+```
+
+- 첫번째 인자로 문자열 sql
+- 두번째 인자로 ResultSetExtractor가 들어간다. 말 그대로 ResultSet을 추출하는 타입이다.
+
+```Java
+@FunctionalInterface
+public interface ResultSetExtractor<T> {
+    @Nullable
+    T extractData(ResultSet rs) throws SQLException, DataAccessException;
+}
+```
+
+ResultSetExtractor은 함수형 인터페이스로 ResultSet을 함수 인자로 가지는 추상 메서드 하나를 구현해서 사용한다.
+
+#### Jdbc Query(SELECT) & Command(INSERT, UPDATE, DELETE)
+
+```Java
+String sql = "SELECT name FROM people WHERE name LIKE ?";
+
+jdbcTemplate.query(sql, resultSet -> {
+	String name = resultSet.getString("name");
+
+	System.out.println(name);
+}, "%우");
+```
+
+PreparedStatement 적용이 쉽다. 문자열을 포함하는지 확인할 때는 LIKE(pattern matching using wild card )와 %(wild card)를 사용한다.(%우 → 우를 포함하는 문자열)
+
+```Java
+String sql = """
+		INSERT INTO people (name, age, gender) VALUES (?, ?, ?)
+		""";
+			
+jdbcTemplate.update(sql, "홍길동", 15, "남");
+```
+
+Command(INSERT, UPDATE, DELETE)를 실행할 때는 update 메서드를 사용한다.
+
+## application.properties
+
+dataSoruce, Hikari(Connection Pool) 등 복잡한 설정을 Spring boot에서 알아서 해준다. 설정에 필요한 값을 application.properties 파일을 통해 입력할 수 있다.
+
+```yml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: password
+```
+
+### url
+
+`jdbc:postgresql://` : `the protocol and subprotocol` indicating that this is a JDBC connection specifically for PostgreSQL.
+
+`localhost` : the `host` where the PostgreSQL server is running. In this case, it's running on the same machine as the client (the application connecting to the database).
+
+`5432` : the default `port number` that PostgreSQL listens to for connections.
+
+postgres after the slash (/) represents the `name of the database` to which you are connecting.
+
+프로토콜, 호스트, 포트, 데이터베이스 이름
 
 ## TransactionTemplate
 
@@ -304,14 +397,10 @@ public class AppRunner implements CommandLineRunner {
 ### 예외
 
 주석 처리된 RuntimeException의 주석을 해제하고 예외를 던지면 예외가 발생하고 롤백되서 데이터베이스에는 영향을 주지 않게 된다.  
-주석처리를 해제하면 IDE에서 throws Exception이 필요없다고 알려준다.
-
-- Unchecked Exceptions : RuntimeException은 unchecked exception으로 RuntimeException을 상속받는다. unchekced exception의 경우 Java에서는 메소드 시그니처 옆에 throws clause를 적을 필요 없다.
-
-- Lambda Exception Handling: TransactionTemplate.execute 메서드는 인자로 TransactionCallback<T> action를 받는다. 이는 함수형 인터페이스이며 checked exception을 선언하지 않다. 위 예시에서는 아니지만 만약 execute의 메서드 인자로 람다 표현식이나 익명 클래스를 사용하는 경우 람다 내에서 던져진 checked exception는 throws 절로 선언할 수 없으므로 이를 catch하거나 unchekced exception로 변환해야 한다.
 
 - TransactionTemplate Handling: TransactionTemplate.excute는 내부적으로 예외를 처리하도록 설계되었다. 따라서 TransactionCallback<T>을 실행하는 동안 런타임 예외가 발생하면 TransactionTemplate이 catch해 트랜잭션을 롤백한 다음 예외를 던진다.
 
-### DAO
+### Unchecked Exceptions
 
-## (?, ?, ?)로 sql injection 막기
+Definition: Unchecked exceptions are the exceptions that are `not checked at compile-time`. In other words, the compiler does not require methods to catch or to declare them. Unchecked exceptions are `subclasses of RuntimeException`, and they are meant to indicate programming errors such as logic mistakes, incorrect API usage, or other unexpected runtime scenarios. So programmers are not forced to handle these exceptions explicitly.
+여기서 handle은 thorw or catch

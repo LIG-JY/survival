@@ -50,3 +50,10 @@
   4. [Entity-Relationship Model](./week6/entity-realationship-model.md)
   5. [JDBC](./week6/jdbc.md)
   6. [JdbcTemplate](./week6/jdbc-template.md)
+
+- [7주차](wee7/README.md)
+
+ 1. [Embeddable](./week7/Embeddable.md)
+ 2. [Hibernate](./week7/hibernate.md)
+ 3. [Orm](./week7/orm.md)
+ 4. [RelationshipMapping](./week7/RelationshipMapping.md)
