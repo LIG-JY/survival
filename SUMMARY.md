@@ -53,7 +53,8 @@
 
 - [7주차](wee7/README.md)
 
- 1. [Embeddable](./week7/Embeddable.md)
+ 1. [Orm](./week7/orm.md)
  2. [Hibernate](./week7/hibernate.md)
- 3. [Orm](./week7/orm.md)
+ 3. [Embeddable](./week7/Embeddable.md)
  4. [RelationshipMapping](./week7/RelationshipMapping.md)
+ 5. [Spring Data JPA](./week7/spring-data-jpa.md)
