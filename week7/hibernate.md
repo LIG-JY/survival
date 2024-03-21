@@ -114,6 +114,23 @@ OOP의 reflection 환경에서 class descriptor은 클래스에 대한 메타데
 
 https://www.baeldung.com/jpa-no-argument-constructor-entity-class
 
-## Typed query 사용하는 것 추천
+## 컬렉션으로 조회하기 : JPQL과 entityManager의 createQuery
 
-제너릭으로 entity를 컬렉션으로 다루기 쉽게 구현함
+JPQL을 이용할 때 2가지 메서드 중 선택해서 사용할 수 있다.
+
+```java
+public Query createQuery(CriteriaDelete deleteQuery);
+
+
+public <T> TypedQuery<T> createQuery(String qlString, Class<T> resultClass);
+```
+
+이 중 TypedQuery를 반환하는 메서드를 사용하는 것을 추천한다. 제너릭으로 entity를 컬렉션으로 다루기 쉽게 구현했기 때문이다.
+
+TypedQuery에서 결과를 조회하는 방법은 다음과 같다.
+
+```java
+List<X> getResultList();
+```
+
+X 타입에 대한 리스트를 반환한다
