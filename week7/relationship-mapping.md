@@ -2,7 +2,7 @@
 
 ## 효과
 
-데이터 모델 Entity의 관계를 객체 참조로 간단히 활용할 수 있게 해준다.
+데이터 모델 Entity의 관계를 객체 참조를 통해 간단히 활용할 수 있게 해준다.
 
 ## 주의사항
 
@@ -24,9 +24,23 @@ Person entity가 Item entity를 소유할 때 Person이 Item에 개별적으로 
 
 ## JPA만 사용할 때 문제점
 
-1. persistence.xml에 Entity가 추가될 때 마다 추가해야함
->> TODO: persistence.xml 작성 요령
+1. persistence.xml에 Entity가 추가될 때 마다 <class> 구문을 추가해야한다.
+
 2. EntityManager을 얻고 이를 통해 연산해야함(Factory를 통해 얻고 하는 과정이 불편함)
->> TODO: EntityManager, EntityManagerFacotry 코드 구조
+
 3. Transaction을 관리하기도 불편하다.(EntityManager에서 Transaction 얻어야함)
->> EntityManager에서 Transaction을 어떻게 관리하는지 코드 까보기
+
+```java
+EntityManagerFactory emf  = Persistence.createEntityManagerFactory("persistence-unit")
+EntityManager em = emf.createEntityManager();
+EntityTransaction tx = em.getTransaction();
+
+try {
+	tx.begin()
+	// some code
+	tx.commit();
+}
+catch (Exception e) {
+	tx.rollback();
+}
+```

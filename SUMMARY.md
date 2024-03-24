@@ -57,4 +57,4 @@
  2. [Hibernate](./week7/hibernate.md)
  3. [Embeddable](./week7/Embeddable.md)
  4. [RelationshipMapping](./week7/RelationshipMapping.md)
- 5. [Spring Data JPA](./week7/spring-data-jpa.md)
+ 5. [Spring Data JPA](./week7/spring-data-jpa/spring-data-jpa.md)
